@@ -71,7 +71,7 @@ def chat():
             "stream": False
         }
 
-        response = requests.post("http://localhost:11434/api/generate", json=payload)
+        response = requests.post("https://18c6367b227.ngrok-free.app/api/generate", json=payload)
         response.raise_for_status()
 
         response_json = response.json()
