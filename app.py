@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import re  # Used for simple regex to parse inputs
 
@@ -7,6 +8,7 @@ from simulate import estimate_efficiency, compute_gen_adjustment, create_simulat
 
 # Create a new Flask web server
 app = Flask(__name__)
+CORS(app) # Enable CORS for all routes
 
 # Load the system prompt from the PROMPTS.md file
 def get_system_prompt():
@@ -79,7 +81,7 @@ def chat():
 
         # IMPORTANT: This URL points to your ngrok tunnel for the local Ollama server.
         # You must keep ngrok running for this to work.
-        response = requests.post("https://92081319da71.ngrok-free.app/api/generate", json=payload)
+        response = requests.post("https://e00a42cdfc86.ngrok-free.app/api/generate", json=payload)
         response.raise_for_status()
 
         response_json = response.json()
