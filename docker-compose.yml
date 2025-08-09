@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Your Flask backend service
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - ollama
+    environment:
+      # Use the Ollama service name and port for the internal network
+      - OLLAMA_URL=http://ollama:11434
+
+  # The Ollama server service
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    # Ensure this model is pulled and ready
+    command: ["serve", "--model", "llama3"]
+
+volumes:
+  ollama_models:

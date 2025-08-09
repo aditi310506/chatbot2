@@ -79,7 +79,7 @@ def chat():
 
         # IMPORTANT: This URL points to your ngrok tunnel for the local Ollama server.
         # You must keep ngrok running for this to work.
-        response = requests.post("https://8d7154c3628e.ngrok-free.app/api/generate", json=payload)
+        response = requests.post("http://ollama:11434/api/generate", json=payload)
         response.raise_for_status()
 
         response_json = response.json()
