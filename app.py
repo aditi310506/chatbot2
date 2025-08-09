@@ -84,4 +84,4 @@ def chat():
         return jsonify({"type": "text", "payload": {"message": "Failed to get a response from the local chatbot. Is Ollama running?"}}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8080)
