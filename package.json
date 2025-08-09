@@ -8,9 +8,9 @@
     "start": "react-scripts start"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://oauth2: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@github.com/aditi310506/chatbot2.git"
-  },
+  "type": "git",
+  "url": "https://github.com/aditi310506/chatbot2.git"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
