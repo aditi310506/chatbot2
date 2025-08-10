@@ -6,7 +6,72 @@
     <title>Chatbot App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div class="chat-container">
+        <div class="chat-header">Chatbot</div>
+        <div class="message-list" id="message-list"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Set your live Render URL here
+        const API_URL = 'https://chatbot2-c0w2.onrender.com';
+        const messageList = document.getElementById('message-list');
+        const chatInput = document.getElementById('chat-input');
+
+        function renderMessage(msg) {
+            if (msg.type === 'simulation') {
+                const simPayload = msg.payload;
+                const messageElement = document.createElement('div');
+                messageElement.className = 'bot-message simulation-response';
+                messageElement.innerHTML = `
+                    <p><strong>Simulation Results</strong></p>
+                    <p>${simPayload.message}</p>
+                    <ul>
+                        <li>Efficiency Change: ${simPayload.efficiency_change}</li>
+                        <li>New Generation: ${simPayload.new_generation_mw} MW</li>
+                    </ul>
+                `;
+                messageList.appendChild(messageElement);
+            } else {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${msg.payload.isUser ? 'user-message' : 'bot-message'}`;
+                messageElement.textContent = msg.payload.message;
+                messageList.appendChild(messageElement);
+            }
+            messageList.scrollTop = messageList.scrollHeight; // Scroll to bottom
+        }
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+            chatInput.value = '';
+
+            renderMessage({ type: 'text', payload: { message: message, isUser: true } });
+
+            try {
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const botResponse = await response.json();
+                renderMessage(botResponse);
+            } catch (error) {
+                console.error('Failed to fetch:', error);
+                renderMessage({ type: 'text', payload: { message: "Sorry, something went wrong. Please try again." } });
+            }
+        }
+        
+        // Initial bot message
+        renderMessage({ type: 'text', payload: { message: "Hello! I'm here to help with thermal-plant efficiency forecasting." } });
+    </script>
   </body>
 </html>

@@ -75,17 +75,20 @@ def chat():
     try:
         payload = {
             "model": "llama3",
-            "prompt": f"{system_prompt}\n\nUser: {user_message}",
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
+            ],
             "stream": False
         }
 
         # IMPORTANT: This URL points to your ngrok tunnel for the local Ollama server.
         # You must keep ngrok running for this to work.
-        response = requests.post("https://e00a42cdfc86.ngrok-free.app/api/generate", json=payload)
+        response = requests.post("http://localhost:11434/api/chat", json=payload)
         response.raise_for_status()
 
         response_json = response.json()
-        bot_response = response_json['response'].strip()
+        bot_response = response_json['message']['content'].strip()
 
         return jsonify({"type": "text", "payload": {"message": bot_response}})
 
